@@ -8,10 +8,10 @@ import bcrypt
 def hash_password(password: str) -> bytes:
     """
     Hashes a given password using bcrypt.
-    
+
     Args:
     password (str): The plaintext password to hash.
-    
+
     Returns:
     bytes: The hashed password.
     """
@@ -23,11 +23,11 @@ def hash_password(password: str) -> bytes:
 def is_valid(hashed_password: bytes, password: str) -> bool:
     """
     Validates if a given password matches the hashed password.
-    
+
     Args:
     hashed_password (bytes): The hashed password to compare against.
     password (str): The plaintext password to check.
-    
+
     Returns:
     bool: True if the password matches the hashed password, False otherwise.
     """

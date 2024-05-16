@@ -5,6 +5,7 @@ Filtered Logger Module
 
 import re
 
+
 def filter_datum(fields, redaction, message, separator):
     """
     Obfuscates specified fields in a log message.

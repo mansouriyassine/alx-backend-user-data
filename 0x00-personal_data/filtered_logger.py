@@ -21,7 +21,6 @@ def filter_datum(fields, redaction, message, separator):
     pattern = '|'.join(re.escape(field) for field in fields)
     return re.sub(pattern, redaction, message)
 
-
 class RedactingFormatter(logging.Formatter):
     """
     Custom logging formatter to redact sensitive information.
@@ -38,7 +37,6 @@ class RedactingFormatter(logging.Formatter):
             message = filter_datum([field], '***', message, ';')
         return message
 
-
 def get_logger():
     """
     Get a logger configured to redact sensitive information.
@@ -52,7 +50,6 @@ def get_logger():
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
-
 
 def get_db():
     """
@@ -68,7 +65,6 @@ def get_db():
     )
     return cnx
 
-
 def main():
     """
     Main function to fetch and print user data from the database.
@@ -78,12 +74,11 @@ def main():
     cursor.execute("SELECT * FROM users")
     for row in cursor.fetchall():
         formatted_row = ";".join(filter_datum(["name", "email", "phone", "ssn", "password"], '***', 
-                                               f"{field}={value}", ';') for field, value in 
-                                    zip(['name', 'email', 'phone', 'ssn', 'password'], row))
+                                               f"{field}={value}", ';') 
+                                  for field, value in zip(['name', 'email', 'phone', 'ssn', 'password'], row))
         print(formatted_row)
     cursor.close()
     db.close()
-
 
 if __name__ == "__main__":
     main()

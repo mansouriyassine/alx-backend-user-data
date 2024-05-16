@@ -5,7 +5,6 @@ Filtered Logger Module
 
 import re
 
-
 def filter_datum(fields, redaction, message, separator):
     """
     Obfuscates specified fields in a log message.
@@ -19,8 +18,11 @@ def filter_datum(fields, redaction, message, separator):
     Returns:
         str: Log message with specified fields obfuscated.
     """
-    return re.sub(
-        '|'.join(map(re.escape, fields)),
-        redaction,
-        message
+    return separator.join(
+        re.sub(
+            r'(?<={}=).+?(?={})'.format(field, re.escape(separator)),
+            redaction,
+            part
+        ) if field in fields else part
+        for field, part in zip(fields, message.split(separator))
     )

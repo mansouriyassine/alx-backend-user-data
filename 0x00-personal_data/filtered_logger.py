@@ -80,8 +80,8 @@ def main():
         formatted_row = ";".join(
             filter_datum(["name", "email", "phone", "ssn", "password"], '***',
                          f"{field}={value}", ';')
-                         for field, value in zip(['name', 'email', 'phone',
-                                                  'ssn', 'password'], row))
+            for field, value in zip(['name', 'email', 'phone',
+                                     'ssn', 'password'], row))
         print(formatted_row)
     cursor.close()
     db.close()

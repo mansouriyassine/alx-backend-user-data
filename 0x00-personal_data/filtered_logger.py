@@ -19,11 +19,9 @@ def filter_datum(fields, redaction, message, separator):
     Returns:
         str: Log message with specified fields obfuscated.
     """
-    return separator.join(
-        re.sub(
-            r'(?<={}=).+?(?={})'.format(field, re.escape(separator)),
-            redaction,
-            part
-        ) if field in fields else part
-        for field, part in zip(fields, message.split(separator))
-    )
+    parts = message.split(separator)
+    for i, part in enumerate(parts):
+        for field in fields:
+            if field + '=' in part:
+                parts[i] = f"{field}={redaction}"
+    return separator.join(parts)

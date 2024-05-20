@@ -6,7 +6,7 @@ Defines the BasicAuth class, which inherits from Auth.
 """
 
 import base64
-from typing import TypeVar
+from typing import TypeVar, List
 from api.v1.auth.auth import Auth
 from models.user import User
 
@@ -177,6 +177,31 @@ class BasicAuth(Auth):
             return None
 
         return self.user_object_from_credentials(user_email, user_pwd)
+
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """
+        Determines if authentication is required based on the path and
+        excluded_paths.
+
+        Args:
+        - path (str): The path to check for authentication requirement.
+        - excluded_paths (List[str]): List of paths that do not require
+          authentication.
+
+        Returns:
+        - bool: True if authentication is required, False otherwise.
+        """
+        if not excluded_paths:
+            return True
+
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('*'):
+                if path.startswith(excluded_path[:-1]):
+                    return False
+            elif path == excluded_path:
+                return False
+
+        return True
 
 
 if __name__ == "__main__":

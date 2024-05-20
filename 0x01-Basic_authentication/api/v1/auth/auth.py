@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""AUTHORIZATION Class"""
+"""
+AUTHORIZATION Class
+"""
 
 from flask import request
 from typing import List, TypeVar
@@ -61,9 +63,9 @@ class Auth:
         Returns:
         - str: The value of the Authorization header or None if not present.
         """
-        if request is None or request.headers.get('Authorization') is None:
+        if request is None or 'Authorization' not in request.headers:
             return None
-        return request.headers.get('Authorization')
+        return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
         """

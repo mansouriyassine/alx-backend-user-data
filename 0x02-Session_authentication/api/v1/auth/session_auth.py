@@ -6,6 +6,7 @@ SessionAuth module for the API
 from api.v1.auth.auth import Auth
 from models.user import User
 import uuid
+import os
 
 
 class SessionAuth(Auth):
@@ -69,34 +70,18 @@ class SessionAuth(Auth):
         user = User.get(user_id)
         return user
 
-
-if __name__ == "__main__":
-    import os
-    from flask import Flask, request
-
-    user_email = "bobsession@hbtn.io"
-    user_clear_pwd = "fake pwd"
-
-    user = User()
-    user.email = user_email
-    user.password = user_clear_pwd
-    user.save()
-
-    sa = SessionAuth()
-    session_id = sa.create_session(user.id)
-    print("User with ID: {} has a Session ID: {}".format(user.id, session_id))
-
-    app = Flask(__name__)
-
-    @app.route('/', methods=['GET'], strict_slashes=False)
-    def root_path():
-        """ Root path
+    def session_cookie(self, request=None):
         """
-        request_user = sa.current_user(request)
-        if request_user is None:
-            return "No user found\n"
-        return "User found: {}\n".format(request_user.id)
+        Returns the value of the cookie named _my_session_id from request.
 
-    API_HOST = os.getenv("API_HOST", "0.0.0.0")
-    API_PORT = os.getenv("API_PORT", "5000")
-    app.run(host=API_HOST, port=API_PORT)
+        Args:
+        - request: The Flask request object.
+
+        Returns:
+        - str: The value of the cookie or None if not present.
+        """
+        if request is None:
+            return None
+
+        session_name = os.getenv("SESSION_NAME", "_my_session_id")
+        return request.cookies.get(session_name)

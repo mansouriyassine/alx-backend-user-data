@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Route module for the API
+Route module for the API.
+This module handles routing and authentication for the API.
 """
+
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
@@ -13,6 +15,7 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 auth = None
 auth_type = getenv("AUTH_TYPE")
+
 if auth_type == 'auth':
     from api.v1.auth.auth import Auth
     auth = Auth()

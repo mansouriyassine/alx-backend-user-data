@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
 SessionAuth module for the API
-
-This module handles session-based authentication
-using Flask and SessionAuth class.
 """
 
 from api.v1.auth.auth import Auth
@@ -88,27 +85,3 @@ class SessionAuth(Auth):
 
         session_name = os.getenv("SESSION_NAME", "_my_session_id")
         return request.cookies.get(session_name)
-
-    def destroy_session(self, request=None) -> bool:
-        """
-        Deletes the user session / logout.
-
-        Args:
-            request: The Flask request object.
-
-        Returns:
-            bool: True if session was successfully destroyed, False otherwise.
-        """
-        if request is None:
-            return False
-
-        session_id = self.session_cookie(request)
-        if session_id is None:
-            return False
-
-        user_id = self.user_id_for_session_id(session_id)
-        if user_id is None:
-            return False
-
-        self.user_id_by_session_id.pop(session_id, None)
-        return True

@@ -27,6 +27,7 @@ def auth_session_login() -> str:
         400: If email or password is missing.
         404: If no user found for the provided email.
         401: If the password is incorrect.
+
     """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -53,21 +54,3 @@ def auth_session_login() -> str:
     response.set_cookie(session_name, session_id)
 
     return response
-
-
-def auth_session_logout() -> str:
-    """
-    Function to logout using session auth.
-
-    DELETE /api/v1/auth_session/logout
-
-    Returns:
-        str: JSON response with an empty dictionary on success.
-
-    Raises:
-        404: If unable to destroy the session.
-    """
-    if not sa.destroy_session(request):
-        abort(404)
-
-    return jsonify({})

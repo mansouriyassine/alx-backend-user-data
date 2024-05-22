@@ -5,7 +5,6 @@ AUTHORIZATION Class
 
 from flask import request
 from typing import List, TypeVar
-import os
 
 
 class Auth:
@@ -22,9 +21,6 @@ class Auth:
 
     - current_user(request=None) -> TypeVar('User'):
       Returns None (placeholder for future implementation).
-
-    - session_cookie(request=None) -> str:
-      Returns the value of the session cookie from the request.
 
     Attributes:
     None
@@ -82,19 +78,3 @@ class Auth:
         - None: Placeholder for future implementation.
         """
         return None
-
-    def session_cookie(self, request=None) -> str:
-        """
-        Returns a cookie value from a request.
-
-        Args:
-        - request: The Flask request object.
-
-        Returns:
-        - str: The value of the session cookie or None if not present.
-        """
-        if request is None:
-            return None
-        
-        session_name = os.getenv('SESSION_NAME', '_my_session_id')
-        return request.cookies.get(session_name)

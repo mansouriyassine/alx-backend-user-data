@@ -11,4 +11,4 @@ class SessionAuth(Auth):
     SessionAuth class that inherits from Auth
     This class will be used for session-based authentication.
     """
-    passs
+    pass

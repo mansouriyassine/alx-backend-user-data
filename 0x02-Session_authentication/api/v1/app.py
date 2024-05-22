@@ -1,5 +1,3 @@
-# api/v1/app.py
-
 #!/usr/bin/env python3
 """
 Route module for the API.
@@ -32,6 +30,7 @@ elif auth_type == 'session_db_auth':
     from api.v1.auth.session_db_auth import SessionDBAuth
     auth = SessionDBAuth()
 
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler """
@@ -42,10 +41,12 @@ def unauthorized(error) -> str:
     """ Unauthorized handler """
     return jsonify({"error": "Unauthorized"}), 401
 
+
 @app.errorhandler(403)
 def forbidden(error) -> str:
     """ Forbidden handler """
     return jsonify({"error": "Forbidden"}), 403
+
 
 @app.before_request
 def before_request_func():
@@ -70,6 +71,7 @@ def before_request_func():
 
     if request.current_user is None:
         abort(403)
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")

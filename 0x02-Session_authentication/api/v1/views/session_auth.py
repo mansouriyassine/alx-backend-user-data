@@ -10,6 +10,7 @@ from os import getenv
 
 sa = SessionAuth()
 
+
 @sa.exempt
 def auth_session_login() -> str:
     """

@@ -43,3 +43,21 @@ class UserSession(Base):
         self.id = str(uuid.uuid4())
         self.user_id = kwargs.get('user_id')
         self.session_id = kwargs.get('session_id')
+
+# SQLAlchemy specific documentation
+def get_dbapi_type(cls, dbapi):
+    """
+    Return the dbapi type for the given DBAPI.
+
+    Args:
+        cls (type): The SQLAlchemy DateTime type class.
+        dbapi (module): The DBAPI module to get the type for.
+
+    Returns:
+        type: The DBAPI type.
+
+    Notes:
+        This method is used to determine the specific database API type to be used
+        for a DateTime column in SQLAlchemy.
+    """
+    pass

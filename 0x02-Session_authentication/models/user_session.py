@@ -2,6 +2,7 @@
 """
 UserSession model
 """
+
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
@@ -12,8 +13,17 @@ Base = declarative_base()
 class UserSession(Base):
     """
     UserSession model class for storing session information in a database.
-    """
 
+    Attributes:
+        id (str): Primary key of the session.
+        user_id (str): ID of the user associated with the session.
+        session_id (str): Unique session identifier.
+        created_at (DateTime): Timestamp of when the session was created.
+
+    Methods:
+        __init__(self, *args: list, **kwargs: dict):
+            Constructor for UserSession model.
+    """
     __tablename__ = 'user_sessions'
 
     id = Column(String(60), primary_key=True, nullable=False)
@@ -33,13 +43,3 @@ class UserSession(Base):
         self.id = str(uuid.uuid4())
         self.user_id = kwargs.get('user_id')
         self.session_id = kwargs.get('session_id')
-
-    def __repr__(self):
-        """
-        Return a representation of the UserSession instance.
-
-        Returns:
-            str: String representation of the UserSession.
-        """
-        return f"<UserSession(id='{self.id}', user_id='{self.user_id}', " \
-               f"session_id='{self.session_id}', created_at='{self.created_at}')>"

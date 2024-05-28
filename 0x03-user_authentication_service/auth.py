@@ -42,24 +42,34 @@ class Auth:
         Raises:
             ValueError: If a user with the given email already exists.
         """
-        # Check if the user already exists
         try:
             self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
-            pass  # User not found, continue with registration
+            pass
         except Exception as e:
-            raise e  # Propagate any unexpected errors
+            raise e
 
-        # Hash the password
         hashed_password = _hash_password(password)
 
-        # Add the user to the database
         user = self._db.add_user(email, hashed_password)
 
         return user
 
+    def valid_login(self, email: str, password: str) -> bool:
+        """Validates user login credentials.
 
-# For testing the function
-if __name__ == "__main__":
-    print(_hash_password("Hello Holberton"))
+        Args:
+            email (str): The email of the user.
+            password (str): The password of the user.
+
+        Returns:
+            bool: True if the login is valid, False otherwise.
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
+        except NoResultFound:
+            return False
+        except Exception as e:
+            return False

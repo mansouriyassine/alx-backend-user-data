@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+UserSession model
+"""
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime

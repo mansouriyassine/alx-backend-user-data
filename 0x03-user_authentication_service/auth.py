@@ -59,4 +59,4 @@ class Auth:
 
 # For testing the function
 if __name__ == "__main__":
-    print(_hash_password("Hello Holberton"))
+    print(Auth()._hash_password("Hello Holberton"))

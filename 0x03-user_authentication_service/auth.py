@@ -7,6 +7,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 
+
 def _hash_password(password: str) -> bytes:
     """Hashes a password using bcrypt.
 
@@ -19,6 +20,7 @@ def _hash_password(password: str) -> bytes:
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
+
 
 class Auth:
     """Auth class to interact with the authentication database.
@@ -56,6 +58,7 @@ class Auth:
         user = self._db.add_user(email, hashed_password)
 
         return user
+
 
 # For testing the function
 if __name__ == "__main__":

@@ -43,13 +43,13 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user by arbitrary keyword arguments.
-        
+
         Args:
             **kwargs: Arbitrary keyword arguments to filter users.
-        
+
         Returns:
             User: The first user matching the criteria.
-        
+
         Raises:
             NoResultFound: If no user is found.
             InvalidRequestError: If invalid arguments are provided.
@@ -61,4 +61,6 @@ class DB:
         except NoResultFound:
             raise NoResultFound("No user found with the specified criteria.")
         except InvalidRequestError:
-            raise InvalidRequestError("Invalid arguments provided for the query.")
+            raise InvalidRequestError(
+                "Invalid arguments provided for the query."
+            )

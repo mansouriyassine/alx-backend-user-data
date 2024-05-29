@@ -45,14 +45,14 @@ class Auth:
 
         Args:
             email (str): The email of the user to register.
-            password (str): The password of the user to 
+            password (str): The password of the user to
                             register.
 
         Returns:
             User: The User object of the newly registered user.
 
         Raises:
-            ValueError: If a user with the given email 
+            ValueError: If a user with the given email
                         already exists.
         """
         try:
@@ -82,7 +82,7 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             hashed_pw = user.hashed_password
-            return bcrypt.checkpw(password.encode('utf-8'), 
+            return bcrypt.checkpw(password.encode('utf-8'),
                                   hashed_pw)
         except NoResultFound:
             return False
@@ -96,7 +96,7 @@ class Auth:
             email (str): The email of the user.
 
         Returns:
-            str: The session ID as a string, or None if the user 
+            str: The session ID as a string, or None if the user
                  is not found.
         """
         try:
@@ -129,7 +129,7 @@ class Auth:
             return None
 
     def destroy_session(self, user_id: int) -> None:
-        """Destroys a session by updating the user's session ID to 
+        """Destroys a session by updating the user's session ID to
            None.
 
         Args:
@@ -155,7 +155,7 @@ class Auth:
             str: The reset password token.
 
         Raises:
-            ValueError: If the user with the given email does 
+            ValueError: If the user with the given email does
                         not exist.
         """
         try:
@@ -191,7 +191,7 @@ class Auth:
 
         hashed_password = _hash_password(password)
         try:
-            self._db.update_user(user.id, 
+            self._db.update_user(user.id,
                                  hashed_password=hashed_password,
                                  reset_token=None)
         except Exception as e:

@@ -2,8 +2,7 @@
 """
 Flask application.
 
-This application defines a REST API with routes to register, log in,
-and log out users.
+This application defines a REST API with routes to register and log in users.
 
 Usage:
     Run the application:
@@ -13,15 +12,12 @@ Usage:
         - GET http://localhost:5000/
         - POST http://localhost:5000/users
         - POST http://localhost:5000/sessions
-        - DELETE http://localhost:5000/sessions
 
     Payload:
         - For user registration (POST /users):
             Form data: 'email', 'password'
         - For user login (POST /sessions):
             Form data: 'email', 'password'
-        - For user logout (DELETE /sessions):
-            Cookie: 'session_id'
 
     Response:
         - For user registration:
@@ -33,12 +29,8 @@ Usage:
             - 200 OK: User logged in successfully
                 {"email": "<user email>", "message": "logged in"}
             - 401 UNAUTHORIZED: Incorrect login information
-        - For user logout:
-            - 302 Found: User logged out and redirected to GET /
-            - 403 FORBIDDEN: Invalid session ID
 """
-from flask import Flask, jsonify, request, abort, make_response, \
-    redirect, url_for
+from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
 
 app = Flask(__name__)
@@ -89,23 +81,6 @@ def login():
     response = make_response(jsonify({"email": email, "message": "logged in"}))
     response.set_cookie("session_id", session_id)
     return response
-
-
-@app.route("/sessions", methods=["DELETE"])
-def logout():
-    """
-    Handle DELETE requests to log out a user.
-
-    Returns:
-        A redirection to the root endpoint or a 403 status code.
-    """
-    session_id = request.cookies.get("session_id")
-    user = AUTH.get_user_from_session_id(session_id)
-    if user:
-        AUTH.destroy_session(user.id)
-        return redirect(url_for('index'))
-    else:
-        abort(403)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 Flask application.
 
 This application defines a REST API with routes to register, log in,
-log out, and reset passwords for users.
+and log out users.
 
 Usage:
     Run the application:
@@ -15,7 +15,6 @@ Usage:
         - POST http://localhost:5000/sessions
         - DELETE http://localhost:5000/sessions
         - GET http://localhost:5000/profile
-        - POST http://localhost:5000/reset_password
 
     Payload:
         - For user registration (POST /users):
@@ -26,8 +25,6 @@ Usage:
             Cookie: 'session_id'
         - For user profile (GET /profile):
             Cookie: 'session_id'
-        - For reset password token (POST /reset_password):
-            Form data: 'email'
 
     Response:
         - For user registration:
@@ -46,10 +43,6 @@ Usage:
             - 200 OK: User profile retrieved successfully
                 {"email": "<user email>"}
             - 403 FORBIDDEN: Invalid session ID or user not found
-        - For reset password token:
-            - 200 OK: Reset password token generated successfully
-                {"email": "<user email>", "reset_token": "<reset token>"}
-            - 403 FORBIDDEN: Email not registered
 """
 from flask import Flask, jsonify, request, abort, make_response, \
     redirect, url_for
@@ -136,22 +129,6 @@ def profile():
     if user:
         return jsonify({"email": user.email}), 200
     else:
-        abort(403)
-
-
-@app.route("/reset_password", methods=["POST"])
-def get_reset_password_token():
-    """
-    Handle POST requests to get a reset password token.
-
-    Returns:
-        dict: A JSON response with the reset token or a 403 status code.
-    """
-    email = request.form["email"]
-    try:
-        reset_token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": email, "reset_token": reset_token}), 200
-    except ValueError:
         abort(403)
 
 

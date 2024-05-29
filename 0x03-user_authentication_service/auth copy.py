@@ -138,28 +138,3 @@ class Auth:
             pass
         except Exception as e:
             pass
-
-    def get_reset_password_token(self, email: str) -> str:
-        """Generates a reset password token for a user.
-
-        Args:
-            email (str): The email of the user.
-
-        Returns:
-            str: The reset password token.
-
-        Raises:
-            ValueError: If the user with the given email does not exist.
-        """
-        try:
-            user = self._db.find_user_by(email=email)
-        except NoResultFound:
-            raise ValueError(f"User {email} does not exist")
-        
-        reset_token = _generate_uuid()
-        try:
-            self._db.update_user(user.id, reset_token=reset_token)
-        except Exception as e:
-            raise e
-        
-        return reset_token

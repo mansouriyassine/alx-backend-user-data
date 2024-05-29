@@ -34,6 +34,7 @@ def log_in(email: str, password: str) -> str:
     assert session_id is not None
     return session_id
 
+
 def profile_unlogged() -> None:
     """Access profile without logging in"""
     url = f"{BASE_URL}/profile"
@@ -48,6 +49,7 @@ def profile_logged(session_id: str) -> None:
     response = requests.get(url, cookies=cookies)
     assert response.status_code == 200, response.text
     assert 'email' in response.json()
+
 
 def log_out(session_id: str) -> None:
     """Log out"""

@@ -6,6 +6,7 @@ import requests
 
 BASE_URL = 'http://localhost:5000'
 
+
 def register_user(email: str, password: str) -> None:
     """Register a new user"""
     url = f"{BASE_URL}/users"
@@ -14,12 +15,14 @@ def register_user(email: str, password: str) -> None:
     assert response.status_code == 200, response.text
     assert response.json() == {"email": email, "message": "user created"}
 
+
 def log_in_wrong_password(email: str, password: str) -> None:
     """Attempt to log in with wrong password"""
     url = f"{BASE_URL}/sessions"
     data = {'email': email, 'password': password}
     response = requests.post(url, data=data)
     assert response.status_code == 401, response.text
+
 
 def log_in(email: str, password: str) -> str:
     """Log in with correct credentials"""
@@ -37,6 +40,7 @@ def profile_unlogged() -> None:
     response = requests.get(url)
     assert response.status_code == 403, response.text
 
+
 def profile_logged(session_id: str) -> None:
     """Access profile after logging in"""
     url = f"{BASE_URL}/profile"
@@ -52,6 +56,7 @@ def log_out(session_id: str) -> None:
     response = requests.delete(url, cookies=cookies)
     assert response.status_code == 302, response.text
 
+
 def reset_password_token(email: str) -> str:
     """Get a reset password token"""
     url = f"{BASE_URL}/reset_password"
@@ -61,6 +66,7 @@ def reset_password_token(email: str) -> str:
     reset_token = response.json().get('reset_token')
     assert reset_token is not None
     return reset_token
+
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
     """Update password using reset token"""
@@ -73,6 +79,7 @@ def update_password(email: str, reset_token: str, new_password: str) -> None:
     response = requests.put(url, data=data)
     assert response.status_code == 200, response.text
     assert response.json() == {"email": email, "message": "Password updated"}
+
 
 EMAIL = "guillaume@holberton.io"
 PASSWD = "b4l0u"

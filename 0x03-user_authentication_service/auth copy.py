@@ -19,8 +19,7 @@ def _hash_password(password: str) -> bytes:
         bytes: The salted hash of the password.
     """
     salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(
-        password.encode('utf-8'), salt)
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
 
 
@@ -45,15 +44,13 @@ class Auth:
 
         Args:
             email (str): The email of the user to register.
-            password (str): The password of the user to 
-                            register.
+            password (str): The password of the user to register.
 
         Returns:
             User: The User object of the newly registered user.
 
         Raises:
-            ValueError: If a user with the given email 
-                        already exists.
+            ValueError: If a user with the given email already exists.
         """
         try:
             self._db.find_user_by(email=email)
@@ -82,8 +79,7 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             hashed_pw = user.hashed_password
-            return bcrypt.checkpw(password.encode('utf-8'), 
-                                  hashed_pw)
+            return bcrypt.checkpw(password.encode('utf-8'), hashed_pw)
         except NoResultFound:
             return False
         except Exception as e:
@@ -96,8 +92,7 @@ class Auth:
             email (str): The email of the user.
 
         Returns:
-            str: The session ID as a string, or None if the user 
-                 is not found.
+            str: The session ID as a string, or None if the user is not found.
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -129,8 +124,7 @@ class Auth:
             return None
 
     def destroy_session(self, user_id: int) -> None:
-        """Destroys a session by updating the user's session ID to 
-           None.
+        """Destroys a session by updating the user's session ID to None.
 
         Args:
             user_id (int): The ID of the user.
@@ -155,8 +149,7 @@ class Auth:
             str: The reset password token.
 
         Raises:
-            ValueError: If the user with the given email does 
-                        not exist.
+            ValueError: If the user with the given email does not exist.
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -170,29 +163,3 @@ class Auth:
             raise e
 
         return reset_token
-
-    def update_password(self, reset_token: str, password: str) -> None:
-        """Updates a user's password using a reset token.
-
-        Args:
-            reset_token (str): The reset token.
-            password (str): The new password.
-
-        Returns:
-            None
-
-        Raises:
-            ValueError: If the reset token is invalid.
-        """
-        try:
-            user = self._db.find_user_by(reset_token=reset_token)
-        except NoResultFound:
-            raise ValueError("Invalid reset token")
-
-        hashed_password = _hash_password(password)
-        try:
-            self._db.update_user(user.id, 
-                                 hashed_password=hashed_password,
-                                 reset_token=None)
-        except Exception as e:
-            raise e

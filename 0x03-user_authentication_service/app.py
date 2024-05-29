@@ -14,6 +14,7 @@ Usage:
         - POST http://localhost:5000/users
         - POST http://localhost:5000/sessions
         - DELETE http://localhost:5000/sessions
+        - GET http://localhost:5000/profile
 
     Payload:
         - For user registration (POST /users):
@@ -21,6 +22,8 @@ Usage:
         - For user login (POST /sessions):
             Form data: 'email', 'password'
         - For user logout (DELETE /sessions):
+            Cookie: 'session_id'
+        - For user profile (GET /profile):
             Cookie: 'session_id'
 
     Response:
@@ -36,6 +39,10 @@ Usage:
         - For user logout:
             - 302 Found: User logged out and redirected to GET /
             - 403 FORBIDDEN: Invalid session ID
+        - For user profile:
+            - 200 OK: User profile retrieved successfully
+                {"email": "<user email>"}
+            - 403 FORBIDDEN: Invalid session ID or user not found
 """
 from flask import Flask, jsonify, request, abort, make_response, \
     redirect, url_for
@@ -86,7 +93,8 @@ def login():
     if not AUTH.valid_login(email, password):
         abort(401)
     session_id = AUTH.create_session(email)
-    response = make_response(jsonify({"email": email, "message": "logged in"}))
+    response = make_response(
+        jsonify({"email": email, "message": "logged in"}))
     response.set_cookie("session_id", session_id)
     return response
 
@@ -104,6 +112,22 @@ def logout():
     if user:
         AUTH.destroy_session(user.id)
         return redirect(url_for('index'))
+    else:
+        abort(403)
+
+
+@app.route("/profile", methods=["GET"])
+def profile():
+    """
+    Handle GET requests to retrieve a user's profile.
+
+    Returns:
+        dict: A JSON response with the user's email or a 403 status code.
+    """
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        return jsonify({"email": user.email}), 200
     else:
         abort(403)
 

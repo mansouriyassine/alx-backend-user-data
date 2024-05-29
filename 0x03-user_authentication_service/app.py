@@ -35,13 +35,13 @@ Usage:
     Response:
         - For user registration:
             - 200 OK: User created successfully
-                {"email": "<registered email>", 
+                {"email": "<registered email>",
                  "message": "user created"}
             - 400 BAD REQUEST: Email already registered
                 {"message": "email already registered"}
         - For user login:
             - 200 OK: User logged in successfully
-                {"email": "<user email>", 
+                {"email": "<user email>",
                  "message": "logged in"}
             - 401 UNAUTHORIZED: Incorrect login information
         - For user logout:
@@ -53,12 +53,12 @@ Usage:
             - 403 FORBIDDEN: Invalid session ID or user not found
         - For reset password token:
             - 200 OK: Reset password token generated successfully
-                {"email": "<user email>", 
+                {"email": "<user email>",
                  "reset_token": "<reset token>"}
             - 403 FORBIDDEN: Email not registered
         - For updating password:
             - 200 OK: Password updated successfully
-                {"email": "<user email>", 
+                {"email": "<user email>",
                  "message": "Password updated"}
             - 403 FORBIDDEN: Invalid reset token
 """
@@ -93,7 +93,7 @@ def register_user():
         email = request.form["email"]
         password = request.form["password"]
         user = AUTH.register_user(email, password)
-        return jsonify({"email": user.email, 
+        return jsonify({"email": user.email,
                         "message": "user created"}), 200
     except ValueError as e:
         return jsonify({"message": str(e)}), 400
@@ -141,7 +141,7 @@ def profile():
     Handle GET requests to retrieve a user's profile.
 
     Returns:
-        dict: A JSON response with the user's email or a 403 
+        dict: A JSON response with the user's email or a 403
               status code.
     """
     session_id = request.cookies.get("session_id")
@@ -158,13 +158,13 @@ def get_reset_password_token():
     Handle POST requests to get a reset password token.
 
     Returns:
-        dict: A JSON response with the reset token or a 403 
+        dict: A JSON response with the reset token or a 403
               status code.
     """
     email = request.form["email"]
     try:
         reset_token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": email, 
+        return jsonify({"email": email,
                         "reset_token": reset_token}), 200
     except ValueError:
         abort(403)
@@ -176,7 +176,7 @@ def update_password():
     Handle PUT requests to update the password.
 
     Returns:
-        dict: A JSON response with a success message or a 403 
+        dict: A JSON response with a success message or a 403
               status code.
     """
     email = request.form["email"]
@@ -184,7 +184,7 @@ def update_password():
     new_password = request.form["new_password"]
     try:
         AUTH.update_password(reset_token, new_password)
-        return jsonify({"email": email, 
+        return jsonify({"email": email,
                         "message": "Password updated"}), 200
     except ValueError:
         abort(403)
